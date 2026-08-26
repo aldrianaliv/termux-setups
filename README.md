@@ -8,8 +8,8 @@ Linux on Android. Debian On Android.
 
 # Pre-Exquisite
 
-- Download Termux App: [Termux](https://example.com)
-- Download Termux X11: [X11](https://example.com)
+- Download Termux App: [Termux](https://github.com/termux/termux-app)
+- Download Termux X11: [X11](https://github.com/termux/termux-x11)
 
 ---
 ## Open Termux App and run this:
