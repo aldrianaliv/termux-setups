@@ -4,7 +4,7 @@ set -u
 termux-wake-lock
 
 export XDG_RUNTIME_DIR=${TMPDIR}
-export DISPLAY=:0
+export DISPLAY=:1
 
 # Clean stale state
 pkill -f "termux-x11" 2>/dev/null
@@ -15,32 +15,33 @@ sleep 1
 # Audio bridge
 pulseaudio --start \
   --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" \
-    --exit-idle-time=-1
+  --exit-idle-time=-1
 
-    # X server
-    termux-x11 :0 >/dev/null 2>&1 &
+# X server
+termux-x11 :1 >/dev/null 2>&1 &
 
-    # GPU
-    virgl_test_server_android >/dev/null 2>&1 &
+# GPU
+virgl_test_server_android >/dev/null 2>&1 &
 
-    # Wait for the X socket instead of guessing
-    for i in $(seq 1 20); do
-      [ -e "${TMPDIR}/.X11-unix/X0" ] && break
-        sleep 0.5
-        done
+# Wait for the X socket instead of guessing
+for i in $(seq 1 20); do
+  [ -e "${TMPDIR}/.X11-unix/X0" ] && break
+  sleep 0.5
+done
 
-        am start --user 0 \
-          -n com.termux.x11/com.termux.x11.MainActivity \
-            >/dev/null 2>&1
-            sleep 1
+am start --user 0 \
+  -n com.termux.x11/com.termux.x11.MainActivity \
+  >/dev/null 2>&1
+sleep 1
 
-            proot-distro login debian --shared-tmp -- /bin/bash -c '
-            exec su - aliv -c "env \
-            DISPLAY=:0 \
-            PULSE_SERVER=127.0.0.1 \
-            XDG_RUNTIME_DIR=/tmp \
-            GALLIUM_DRIVER=virpipe \
-            MESA_GL_VERSION_OVERRIDE=4.0 \
-            dbus-launch --exit-with-session startxfce4"
-            '
-            exit 0
+# NOTE: replace <user> below with the Debian username you created via `adduser`
+proot-distro login debian --shared-tmp -- /bin/bash -c '
+  exec su - <user> -c "env \
+    DISPLAY=:1 \
+    PULSE_SERVER=127.0.0.1 \
+    XDG_RUNTIME_DIR=/tmp \
+    GALLIUM_DRIVER=virpipe \
+    MESA_GL_VERSION_OVERRIDE=4.0 \
+    dbus-launch --exit-with-session startxfce4"
+'
+exit 0

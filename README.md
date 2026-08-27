@@ -59,6 +59,8 @@ export MESA_LOADER_DRIVER_OVERRIDE=zink
 export GALLIUM_DRIVER=zink
 ```
 ## Desktop Run Script
+
+### Snapdragon / Adreno GPU (Zink + Turnip)
 `scripts/startxfce.sh` starts termux-x11 and pulseaudio, enables Zink/Turnip
 GPU acceleration, then launches the XFCE4 session.
 
@@ -69,6 +71,22 @@ main/scripts/startxfce.sh
 chmod +x startxfce.sh
 
 ./startxfce.sh
+```
+
+### Other Chips / GPUs (VirGL)
+Turnip only supports Adreno GPUs, so on other SoCs (e.g. Mali, PowerVR) use
+`scripts/startxfce-generic.sh` instead. It's the same script but swaps
+Zink/Turnip for VirGL (`virgl_test_server_android` + `GALLIUM_DRIVER=virpipe`),
+which works across GPU vendors, at the cost of the performance you'd get from
+a native driver like Turnip.
+
+```
+curl -L -o startxfce-generic.sh https://raw.githubusercontent.com/aldrianaliv/termux-setups/
+main/scripts/startxfce-generic.sh
+
+chmod +x startxfce-generic.sh
+
+./startxfce-generic.sh
 ```
 ---
 
@@ -108,6 +126,23 @@ sudo apt install plank
 ```
 pkg install virglrenderer-android
 
+```
+
+### Debian Run Script
+`scripts/startdebian.sh` starts termux-x11, pulseaudio and VirGL, then logs
+into the Debian proot and launches XFCE4 as your Debian user.
+
+**Before running it**, edit the script and replace the literal `<user>`
+placeholder in the `su - <user>` line with the Debian username you created
+with `adduser` above.
+
+```
+curl -L -o startdebian.sh https://raw.githubusercontent.com/aldrianaliv/termux-setups/
+main/scripts/startdebian.sh
+
+chmod +x startdebian.sh
+
+./startdebian.sh
 ```
 
 ---
