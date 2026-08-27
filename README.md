@@ -63,8 +63,11 @@ export GALLIUM_DRIVER=zink
 GPU acceleration, then launches the XFCE4 session.
 
 ```
-curl -L -o startxfce.sh https://raw.githubusercontent.com/aldrianaliv/termux-setups/main/scripts/startxfce.sh
+curl -L -o startxfce.sh https://raw.githubusercontent.com/aldrianaliv/termux-setups/
+main/scripts/startxfce.sh
+
 chmod +x startxfce.sh
+
 ./startxfce.sh
 ```
 ---
